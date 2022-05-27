@@ -11,24 +11,28 @@
         background-color: rosybrown;
       }
       h1 {
-        margin: 0;
-      }
-      #nav {
-        background-color: black;
-        color: white;
-        padding-top: 20px;
-        padding-left: 20px;
-        padding-bottom: 30px;
+        color: black;
         font-family: 'PT Sans Caption', sans-serif;
+        font-weight: 700;
+        text-align: center;
+        margin-top: 10%;
+        font-size: 60px
       }
-      .content {
-        padding: 20px;
+      p {
+        color: black;
+        font-family: 'Montserrat', sans-serif;
+        text-align: center;
+        font-size: 20px;
       }
       #login, #loggedin {
         display: none;
       }
+      #login {
+        text-align: center;
+        padding-top: 2%;
+      }
       .btn {
-        background-color: darkslategray;
+        background-color: black;
         border: none;
         color: rosybrown;
         font-family: 'Montserrat', sans-serif;
@@ -41,12 +45,14 @@
         border-radius: 30px;
       }
       .btn:hover {
-        background-color: black;
-        color: rosybrown;
+        background-color: rosybrown;
+        color: black;
+        border: 2px solid black;
       }
       .btn:onclick {
-        background-color: black;
-        color: rosybrown;
+        background-color: rosybrown;
+        color: black;
+        border: 2px solid black;
       }
       .text-overflow {
         overflow: hidden;
@@ -58,22 +64,18 @@
   </head>
 
   <body>
-    <div class="header">
-      <div id="nav">
-        <h1>Spotify Weighted Shuffle</h1>
-      </div>
+    
+    <h1>Spotify Weighted Shuffle</h1>
+    <p>Shuffle your music the way you want.</p>
+    <div id="login">
+      <a href="/login" class="btn btn-primary">LOG IN WITH SPOTIFY</a>
     </div>
-    <div class="content">
-      <div id="login">
-        <a href="/login" class="btn btn-primary">LOG IN WITH SPOTIFY</a>
+    <div id="loggedin">
+      <div id="user-profile">
       </div>
-      <div id="loggedin">
-        <div id="user-profile">
-        </div>
-        <div id="oauth">
-        </div>
-        <button class="btn btn-default" id="obtain-new-token">Obtain new token using the refresh token</button>
+      <div id="oauth">
       </div>
+      <button class="btn btn-default" id="obtain-new-token">Obtain new token using the refresh token</button>
     </div>
 
     <script id="user-profile-template" type="text/x-handlebars-template">
