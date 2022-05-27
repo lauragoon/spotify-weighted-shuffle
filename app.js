@@ -1,16 +1,7 @@
-/**
- * This is an example of a basic node.js script that performs
- * the Authorization Code oAuth2 flow to authenticate against
- * the Spotify Accounts.
- *
- * For more information, read
- * https://developer.spotify.com/web-api/authorization-guide/#authorization_code_flow
- */
-
 var express = require('express'); // Express web server framework
 var request = require('request');
 var cors = require('cors');
-var querystring = require('querystring');
+var URLSearchParams = require('url').URLSearchParams;
 var cookieParser = require('cookie-parser');
 
 var client_id = 'CLIENT_ID';
@@ -46,15 +37,15 @@ app.get('/login', function(req, res) {
   res.cookie(stateKey, state);
 
   // your application requests authorization
-  var scope = 'user-read-private user-read-email';
+  var scope = 'playlist-read-private user-modify-playback-state';
   res.redirect('https://accounts.spotify.com/authorize?' +
-    querystring.stringify({
+    new URLSearchParams({
       response_type: 'code',
       client_id: client_id,
       scope: scope,
       redirect_uri: redirect_uri,
       state: state
-    }));
+    }).toString());
 });
 
 app.get('/callback', function(req, res) {
@@ -68,9 +59,9 @@ app.get('/callback', function(req, res) {
 
   if (state === null || state !== storedState) {
     res.redirect('/#' +
-      querystring.stringify({
+      new URLSearchParams({
         error: 'state_mismatch'
-      }));
+      }).toString());
   } else {
     res.clearCookie(stateKey);
     var authOptions = {
@@ -81,7 +72,7 @@ app.get('/callback', function(req, res) {
         grant_type: 'authorization_code'
       },
       headers: {
-        'Authorization': 'Basic ' + (new Buffer(client_id + ':' + client_secret).toString('base64'))
+        'Authorization': 'Basic ' + (new Buffer.from(client_id + ':' + client_secret).toString('base64'))
       },
       json: true
     };
@@ -105,15 +96,15 @@ app.get('/callback', function(req, res) {
 
         // we can also pass the token to the browser to make requests from there
         res.redirect('/#' +
-          querystring.stringify({
+          new URLSearchParams({
             access_token: access_token,
             refresh_token: refresh_token
-          }));
+          }).toString());
       } else {
         res.redirect('/#' +
-          querystring.stringify({
+          new URLSearchParams({
             error: 'invalid_token'
-          }));
+          }).toString());
       }
     });
   }
@@ -125,7 +116,7 @@ app.get('/refresh_token', function(req, res) {
   var refresh_token = req.query.refresh_token;
   var authOptions = {
     url: 'https://accounts.spotify.com/api/token',
-    headers: { 'Authorization': 'Basic ' + (new Buffer(client_id + ':' + client_secret).toString('base64')) },
+    headers: { 'Authorization': 'Basic ' + (new Buffer.from(client_id + ':' + client_secret).toString('base64')) },
     form: {
       grant_type: 'refresh_token',
       refresh_token: refresh_token
